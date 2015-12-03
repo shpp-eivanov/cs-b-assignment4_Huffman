@@ -1,4 +1,11 @@
-﻿#include <iostream>
+﻿/**********************************************************
+ * File: Huffman.cpp
+ * ----------------------
+ * v.1 2015/11/10
+ * Program makes Huffman principle compression and
+ * decompression for user .txt file.
+ **********************************************************/
+#include <iostream>
 #include "simpio.h"
 #include "console.h"
 #include "bstream.h"
@@ -19,7 +26,10 @@ int main() {
     * use fileInput function for console input
     * Output files will be saved into project build folder
     *
-    * After decompression this programm is done
+    * After decompression this programm is done.
+    *
+    * Suposed, it will be simple .txt file.
+    * Any other file types weren't tesetd.
     */
 
    //string inputFile = fileInput("Enter file name: ");
@@ -27,8 +37,10 @@ int main() {
    string cypherFile = "Cyphered_" + inputFile;
    string outFile = "Decoded_" + inputFile;
 
+   cout << "PROCESSING..." << endl;
+   cout << "==========================================================" << endl;
    /* Huffman compression process */
-   cout << "WAIT, FILE \"" << inputFile << "\" IS BEING CODED..." << endl;
+   cout << "    - WAIT, FILE \"" << inputFile << "\" IS BEING CODED..." << endl;
    /* Prepare input stream object   */
    ifbstream infile;
    infile.open(inputFile.c_str());
@@ -38,10 +50,10 @@ int main() {
    compress(infile, outfile);
    infile.close();
    outfile.close();
-   cout << "        FILE'S CODING COMPLETE!" << endl;
+   cout << "    - FILE'S CODING COMPLETE!" << endl;
 
    /* Huffman decompression process */
-   cout << "WAIT, CYPHER FILE \"" << cypherFile << "\" IS BEING DECODED..." << endl;
+   cout << "    - WAIT, CYPHER FILE \"" << cypherFile << "\" IS BEING DECODED..." << endl;
    ifbstream ibStream;
    ibStream.open(cypherFile.c_str());
    ibStream.rewind();
@@ -51,9 +63,9 @@ int main() {
    decompress(ibStream,outstr2);
    ibStream.close();
    outstr2.close();
-   cout << "        CYPHER FILE DECODING COMPLETE TO FILE: \"" << outFile << "\"" <<  endl;
-   cout << endl;
-   cout << "(DECODED FILE IS SAVED INTO PROJECT BUILD FOLDER)" << endl;
+   cout << "    - CYPHER FILE DECODING COMPLETE TO FILE: \"" << outFile << "\"" <<  endl;
+   cout << "=================================================" << endl;
+   cout << "ALL FILES ARE SAVED INTO PROJECT BUILD FOLDER!" << endl;
 
    return 0;
 }

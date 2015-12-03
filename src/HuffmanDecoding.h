@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include "console.h"
 #include "strlib.h"
+#include "vector.h"
 #include "bstream.h"
 #include "HuffmanDecoding.h"
 #include "HuffmanTypes.h"

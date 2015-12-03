@@ -18,10 +18,10 @@
 #include <stdlib.h>
 #include "console.h"
 #include "strlib.h"
+#include "vector.h"
 #include "bstream.h"
 #include "HuffmanEncoding.h"
 #include "HuffmanTypes.h"
-#include "myPQueue.h"
 
 
 /* User input:
@@ -42,7 +42,7 @@ Map<ext_char, int> getFrequencyTable(ibstream &infile);
  * Usage: buildNodesVector(vector, frequencyTable);
  * --------------------------------------------------------
  * Creates symbols Nodes from table and adds them to Nodes* vector */
-void loadQueue(MyPQueue<Node*>& mpq, Map<ext_char, int> &fileMap);
+void buildNodesVector(Vector<Node*>& vec, Map<ext_char, int> &fileMap);
 
 /* Function: buildEncodingTree
  * Usage: Node* tree = buildEncodingTree(frequency);
@@ -54,7 +54,7 @@ void loadQueue(MyPQueue<Node*>& mpq, Map<ext_char, int> &fileMap);
  * This function can assume that there is always at least one
  * entry in the map, since the EOF character will always
  * be present */
-Node* buildEncodingTree(MyPQueue<Node *> &mpq);
+Node* buildEncodingTree(Vector<Node*> &vec);
 
 /* Function: freeTree
  * Usage: freeTree(encodingTree);

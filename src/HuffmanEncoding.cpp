@@ -66,17 +66,16 @@ Map<ext_char, int> getFrequencyTable(ibstream& infile) {
  * Usage: buildNodesVector(vector, frequencyTable);
  * --------------------------------------------------------
  * Creates symbols Nodes from table and adds them to Nodes* vector */
-void loadQueue(MyPQueue<Node*>& mpq, Map<ext_char, int>& fileMap){
+void buildNodesVector(Vector<Node*>& vec, Map<ext_char, int>& fileMap){
     for(ext_char key: fileMap){
         Node* symbNode = new Node;
         /* Node constructor */
         symbNode->symbol = key;
-        symbNode->symbAppearance = fileMap[key];//!!!!!!!!!!!!!!!!!!
+        symbNode->symbAppearance = fileMap[key];
         symbNode->leftChild = NULL;
         symbNode->rightChild = NULL;
         /* Add curent node to queue whith apearence priority */
-        int symbAppearance = fileMap[key];
-        mpq.enqueue(symbNode, symbAppearance);
+        vec.add(symbNode);
     }
 }
 
@@ -110,19 +109,19 @@ Node* excludeMinFromVec(Vector<Node*>& vec){
  * This function can assume that there is always at least one
  * entry in the map, since the EOF character will always
  * be present */
-Node* buildEncodingTree(MyPQueue<Node*>& mpq){
+Node* buildEncodingTree(Vector<Node*> &vec){
     Node* root = new Node;//this root will return copy of tree root from function
-    while(!mpq.isEmpty()){
-        Node* nd1 = mpq.dequeueMin();//remove min appearence node form vec
-        if(!mpq.isEmpty()){
-            Node* nd2 = mpq.dequeueMin();
+    while(!vec.isEmpty()){
+        Node* nd1 = excludeMinFromVec(vec);//remove min appearence node form vec
+        if(!vec.isEmpty()){
+            Node* nd2 = excludeMinFromVec(vec);
             int sumAppear = nd1->symbAppearance + nd2->symbAppearance;
             Node* parent = new Node;
             parent->leftChild = nd1;
             parent->rightChild = nd2;
             parent->symbAppearance = sumAppear;
             parent->symbol = NOT_A_CHAR;
-            mpq.enqueue(parent, sumAppear);
+            vec.add(parent);
         }else{
             root = nd1;
         }
@@ -255,11 +254,11 @@ void compress(ibstream& infile, obstream& outfile) {
     Map<ext_char, int> frequenciesTable = getFrequencyTable(infile);
 
     /* Buffer-vector for cypher tree creation */
-    MyPQueue<Node*> mpq;
+    Vector<Node*> vec;
     /* Add nodes for each sumbol and put them to vec */
-    loadQueue(mpq, frequenciesTable);
+    buildNodesVector(vec, frequenciesTable);
     /* Main Huffman tree building */
-    Node* root = buildEncodingTree(mpq);
+    Node* root = buildEncodingTree(vec);
 
     /* ENCODE TREE INTO CYPHER FILE HEADER */
     encodeTreeToFileHeader(root, outfile);
