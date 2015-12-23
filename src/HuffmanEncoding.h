@@ -1,5 +1,8 @@
 /*******************************************************
  * File: HuffmanEncoding.h
+ * --------------------------
+ * v.2 2015/12/23
+ * - compress() is changed
  *
  * Definitions for the functions necessary to build a
  * Huffman encoding system.
@@ -24,8 +27,10 @@
 #include "HuffmanTypes.h"
 
 
-/* User input:
- * Defines if this file exist in project directory */
+/* Function: fileInput
+ * -------------------
+ * Defines if this file exist in project directory
+ */
 string fileInput(string promptText);
 
 /* Function: getFrequencyTable
@@ -41,32 +46,41 @@ Map<ext_char, int> getFrequencyTable(ibstream &infile);
 /* Function: buildNodesVector
  * Usage: buildNodesVector(vector, frequencyTable);
  * --------------------------------------------------------
- * Creates symbols Nodes from table and adds them to Nodes* vector */
-void buildNodesVector(Vector<Node*>& vec, Map<ext_char, int> &fileMap);
+ * Creates symbols Nodes from table and adds them to Nodes* vector
+ */
+void buildNodesVector(Vector<Node*>& nodesVector, Map<ext_char, int> &fileFrequenciesTable);
 
 /* Function: buildEncodingTree
- * Usage: Node* tree = buildEncodingTree(frequency);
+ * Usage: Node* tree = buildEncodingTree(nodesVector);
  * --------------------------------------------------------
- * Given a map from extended characters to frequencies,
+ * Given a nodesVector of frequencies,
  * constructs a Huffman encoding tree from those frequencies
  * and returns a pointer to the root.
  *
  * This function can assume that there is always at least one
  * entry in the map, since the EOF character will always
- * be present */
-Node* buildEncodingTree(Vector<Node*> &vec);
+ * be present
+ */
+Node* buildEncodingTree(Vector<Node*> &nodesVector);
 
-/* Function: freeTree
- * Usage: freeTree(encodingTree);
- * --------------------------------------------------------
+/* Function: deleteTree
+ * Usage: deleteTree(encodingTree);
+ * --------------------------------
  * Deallocates all memory allocated for a given encoding
- * tree.  */
+ * tree.
+ */
 void deleteTree(Node* &node);
 
-/* Encodes tree shape into cypher
- * Makes depth traversing of coding tree, and writes
+/* Function: encodeTreeToFileHeader
+ * --------------------------------
+ * Encodes tree shape into cypherFile.
+ * Makes depth traversing of coding tree, and writes:
+ *
  * - 0 - if it's knot at this traverse, without symbols
- * - 1 - if it's leaf at this traverse, without childs. It is followed by char byte code  */
+ *
+ * - 1 - if it's leaf at this traverse, without childs.
+ *   It is followed by char byte code.
+ */
 void encodeTreeToFileHeader(Node* node, obstream &outstr);
 
 /* Function: encodeMainTextToFile
@@ -85,15 +99,16 @@ void encodeTreeToFileHeader(Node* node, obstream &outstr);
  *   - The output file already has the encoding table written
  *     to it, and the file cursor is at the end of the file.
  *     This means that you should just start writing the bits
- *     without seeking the file anywhere.  */
+ *     without seeking the file anywhere.
+ */
 void encodeMainTextToFile(ibstream &infile, Node* encodingTree, obstream &outfile);
 
 /* Function: compress
- * Usage: compress(infile, outfile);
+ * Usage: compress(inputFile, cypherFile);
  * --------------------------------------------------------
  * Main entry point for the Huffman compressor.  Compresses
- * the file whose contents are specified by the input
- * ibstream, then writes the result to outfile. */
-void compress(ibstream& infile, obstream& outfile);
+ * the inputFile, then writes the result to cypherFile.
+ */
+void compress(string inputFile, string cypherFile);
 
 #endif

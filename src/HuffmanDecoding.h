@@ -1,8 +1,12 @@
 /*******************************************************
- * File: HuffmanEncoding.h
+ * File: HuffmanDecoding.h
+ * --------------------------
+ * v.2 2015/12/23
+ * - decompress() is changed
  *
  * Definitions for the functions necessary to build a
  * Huffman encoding system.
+ *
  *******************************************************/
 
 #ifndef HuffmanDecoding_Included
@@ -25,24 +29,25 @@
 
 
 /* Function: readFileHeader
- * Reads header of cyphered file and reconstructs huffman tree
  * --------------------------------------------------------
  * Reads header of cyphered file and reconstructs huffman tree
  * for this cypher file
  */
 void readFileHeader(ibstream& infile, Node* root);
 
-/* Main cypher text decoding process */
+/* Function: decodeFileToFile
+ * --------------------------
+ * Main cyphered text decoding process.
+ */
 void decodeFileToFile(ibstream &infile, Node* root, obstream &outfile);
 
 /* Function: decompress
- * Usage: decompress(infile, outfile);
+ * Usage: decompress(cypherFile, outFile);
  * --------------------------------------------------------
  * Main entry point for the Huffman decompressor.
- * Decompresses the file whose contents are specified by the
- * input ibstream, then writes the decompressed version of
- * the file to the stream specified by outfile.
+ * Decompresses the cypherFile, then writes the decompressed version
+ * to outFile.
  */
-void decompress(ibstream& infile, obstream &outfile);
+void decompress(string cypherFile, string outFile);
 
 #endif

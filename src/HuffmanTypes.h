@@ -1,5 +1,7 @@
 /**********************************************
  * File: HuffmanTypes.h
+ * --------------------------
+ * v.1 2015/11/10
  *
  * A file containing the types used by the Huffman
  * encoding program.

@@ -1,7 +1,10 @@
 ﻿/**********************************************************
  * File: Huffman.cpp
  * ----------------------
- * v.1 2015/11/10
+ * v.2 2015/12/23 - decomposition in main
+ * - compress() is changed
+ * - decompress() is changed
+ *
  * Program makes Huffman principle compression and
  * decompression for user .txt file.
  **********************************************************/
@@ -37,35 +40,11 @@ int main() {
    string cypherFile = "Cyphered_" + inputFile;
    string outFile = "Decoded_" + inputFile;
 
-   cout << "PROCESSING..." << endl;
-   cout << "==========================================================" << endl;
    /* Huffman compression process */
-   cout << "    - WAIT, FILE \"" << inputFile << "\" IS BEING CODED..." << endl;
-   /* Prepare input stream object   */
-   ifbstream infile;
-   infile.open(inputFile.c_str());
-   ofbstream outfile;
-   outfile.open(cypherFile.c_str());
-   /* Input file compression */
-   compress(infile, outfile);
-   infile.close();
-   outfile.close();
-   cout << "    - FILE'S CODING COMPLETE!" << endl;
+   compress(inputFile, cypherFile);
 
    /* Huffman decompression process */
-   cout << "    - WAIT, CYPHER FILE \"" << cypherFile << "\" IS BEING DECODED..." << endl;
-   ifbstream ibStream;
-   ibStream.open(cypherFile.c_str());
-   ibStream.rewind();
-   ofbstream outstr2;
-   outstr2.open(outFile.c_str());
-   /* Cypher file decompression */
-   decompress(ibStream,outstr2);
-   ibStream.close();
-   outstr2.close();
-   cout << "    - CYPHER FILE DECODING COMPLETE TO FILE: \"" << outFile << "\"" <<  endl;
-   cout << "=================================================" << endl;
-   cout << "ALL FILES ARE SAVED INTO PROJECT BUILD FOLDER!" << endl;
+   decompress(cypherFile, outFile);
 
    return 0;
 }

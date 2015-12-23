@@ -1,11 +1,16 @@
 /**********************************************************
- * File: HuffmanEncoding.cpp
+ * File: HuffmanDecoding.cpp
+ * --------------------------
+ * v.2 2015/12/23
+ * - decompress() is changed
+ * - "HuffmanEncoding.h" to import deleteTree is added
  *
  * Implementation of the functions from HuffmanEncoding.h.
  *
  **********************************************************/
 
 #include "HuffmanDecoding.h"
+#include "HuffmanEncoding.h" //To import deleteTree
 #include "HuffmanTypes.h"
 
 using namespace std;
@@ -39,7 +44,10 @@ void readFileHeader(ibstream& infile, Node* root) {
     }
 }
 
-/* Main cypher text decoding process */
+/* Function: decodeFileToFile
+ * --------------------------
+ * Main cyphered text decoding process.
+ */
 void decodeFileToFile(ibstream& infile, Node* root, obstream& outfile){
     int bit;
     Node* currentNode = root;
@@ -70,11 +78,28 @@ void decodeFileToFile(ibstream& infile, Node* root, obstream& outfile){
  * input ibstream, then writes the decompressed version of
  * the file to the stream specified by outfile.
  */
-void decompress(ibstream& infile, obstream& outfile) {
-    Node* root = new Node;
+void decompress(string cypherFile, string outFile) {
+    cout << "    - WAIT, CYPHER FILE \"" << cypherFile << "\" IS BEING DECODED..." << endl;
+    ifbstream ibStream;
+    ibStream.open(cypherFile.c_str());
+    //ibStream.rewind();
+    ofbstream obStream;
+    obStream.open(outFile.c_str());
+
+    Node* huffmanTreeRoot = new Node;
     /* Gets Huffman tree from the header */
-    readFileHeader(infile, root);
-    infile.get();//get some charr
+    readFileHeader(ibStream, huffmanTreeRoot);
+
+    ibStream.get();//get some redundant charr
+
     /* Main decoding process */
-    decodeFileToFile(infile, root, outfile);
+    decodeFileToFile(ibStream, huffmanTreeRoot, obStream);
+
+    deleteTree(huffmanTreeRoot);
+
+    ibStream.close();
+    obStream.close();
+    cout << "    - CYPHER FILE DECODING COMPLETE TO FILE: \"" << outFile << "\"" <<  endl;
+    cout << "==========================================================" << endl;
+    cout << "ALL FILES ARE SAVED INTO PROJECT BUILD FOLDER!" << endl;
 }
