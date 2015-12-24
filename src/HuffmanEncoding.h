@@ -1,12 +1,12 @@
 /*******************************************************
- * File: HuffmanEncoding.h
- * --------------------------
- * v.2 2015/12/23
- * - compress() is changed
- *
- * Definitions for the functions necessary to build a
- * Huffman encoding system.
- *******************************************************/
+* File: HuffmanEncoding.h
+* --------------------------
+* v.2 2015/12/23
+* - compress() is changed
+*
+* Definitions for the functions necessary to build a
+* Huffman encoding system.
+*******************************************************/
 
 #ifndef HuffmanEncoding_Included
 #define HuffmanEncoding_Included
@@ -110,5 +110,4 @@ void encodeMainTextToFile(ibstream &infile, Node* encodingTree, obstream &outfil
  * the inputFile, then writes the result to cypherFile.
  */
 void compress(string inputFile, string cypherFile);
-
 #endif

@@ -6,7 +6,7 @@
  * A file containing the types used by the Huffman
  * encoding program.
  */
- 
+
 #ifndef HuffmanTypes_Included
 #define HuffmanTypes_Included
 
@@ -65,5 +65,4 @@ struct Node {
 
     std::string toString();
 };
-
 #endif

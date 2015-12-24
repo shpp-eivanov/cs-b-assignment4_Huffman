@@ -1,13 +1,13 @@
 /*******************************************************
- * File: HuffmanDecoding.h
- * --------------------------
- * v.2 2015/12/23
- * - decompress() is changed
- *
- * Definitions for the functions necessary to build a
- * Huffman encoding system.
- *
- *******************************************************/
+* File: HuffmanDecoding.h
+* --------------------------
+* v.2 2015/12/23
+* - decompress() is changed
+*
+* Definitions for the functions necessary to build a
+* Huffman encoding system.
+*
+*******************************************************/
 
 #ifndef HuffmanDecoding_Included
 #define HuffmanDecoding_Included
@@ -49,5 +49,4 @@ void decodeFileToFile(ibstream &infile, Node* root, obstream &outfile);
  * to outFile.
  */
 void decompress(string cypherFile, string outFile);
-
 #endif

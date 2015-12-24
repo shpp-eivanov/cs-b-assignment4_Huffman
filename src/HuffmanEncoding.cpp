@@ -1,12 +1,12 @@
 /**********************************************************
- * File: HuffmanEncoding.cpp
- * --------------------------
- * v.2 2015/12/23
- * - compress() is changed
- *
- * Implementation of the functions from HuffmanEncoding.h.
- *
- **********************************************************/
+* File: HuffmanEncoding.cpp
+* --------------------------
+* v.2 2015/12/23
+* - compress() is changed
+*
+* Implementation of the functions from HuffmanEncoding.h.
+*
+**********************************************************/
 
 #include "HuffmanEncoding.h"
 #include "HuffmanTypes.h"
@@ -17,12 +17,12 @@ using namespace std;
  * -------------------
  * Defines if this file exist in project directory
  */
-string fileInput(string promptText){
+string fileInput(string promptText) {
     /* Until user dosen't make valid input - ask him */
     string result = "";
-    while(true){
+    while (true) {
         result = getLine(promptText);
-        if(fileExists(result)){
+        if (fileExists(result)) {
             break;
         }else{
             cout << "Unfortunately your input is failed" << endl;
@@ -37,8 +37,8 @@ string fileInput(string promptText){
  * for current char key.
  */
 void modifyMap(Map<ext_char, int>& mainMap,
-               ext_char nextSymbol){
-    if(mainMap.containsKey(nextSymbol)){
+           ext_char nextSymbol) {
+    if (mainMap.containsKey(nextSymbol)) {
         /* Modifies map entry - increments symbol value */
         mainMap[nextSymbol]++;
     }else{
@@ -78,8 +78,8 @@ Map<ext_char, int> getFrequencyTable(ibstream& infile) {
  * --------------------------------------------------------
  * Creates symbols Nodes from table and adds them to Nodes* vector
  */
-void buildNodesVector(Vector<Node*>& nodesVector, Map<ext_char, int>& fileFrequenciesTable){
-    for(ext_char key: fileFrequenciesTable){
+void buildNodesVector(Vector<Node*>& nodesVector, Map<ext_char, int>& fileFrequenciesTable) {
+    for (ext_char key: fileFrequenciesTable) {
         Node* symbNode = new Node;
         /* Node constructor */
         symbNode->symbol = key;
@@ -95,19 +95,19 @@ void buildNodesVector(Vector<Node*>& nodesVector, Map<ext_char, int>& fileFreque
  * ---------------------------
  * Remove node with min appearance from vec.
  */
-Node* excludeMinFromVec(Vector<Node*>& vec){
+Node* excludeMinFromVec(Vector<Node*>& vec) {
     Node* min = vec[0];
     bool remove_0 = true;//is vec[0] has to be removed as the most minimal value
     /* Get minimal apearance node from vec */
-    for(int i = 0; i < vec.size(); i++){
-        if(min->symbAppearance > vec[i]->symbAppearance){
+    for (int i = 0; i < vec.size(); i++) {
+        if (min->symbAppearance > vec[i]->symbAppearance) {
             min = vec[i];
             vec.remove(i);
             remove_0 = false;
             break;
         }
     }
-    if(remove_0){
+    if (remove_0) {
         vec.remove(0);
     }
     return min;
@@ -124,11 +124,11 @@ Node* excludeMinFromVec(Vector<Node*>& vec){
  * entry in the map, since the EOF character will always
  * be present
  */
-Node* buildEncodingTree(Vector<Node*>& nodesVector){
+Node* buildEncodingTree(Vector<Node*>& nodesVector) {
     Node* root = new Node;//this root will return copy of tree root from function
-    while(!nodesVector.isEmpty()){
+    while (!nodesVector.isEmpty()) {
         Node* nd1 = excludeMinFromVec(nodesVector);//remove min appearence node form vec
-        if(!nodesVector.isEmpty()){
+        if (!nodesVector.isEmpty()) {
             Node* nd2 = excludeMinFromVec(nodesVector);
             int sumAppear = nd1->symbAppearance + nd2->symbAppearance;
             Node* parent = new Node;
@@ -150,17 +150,17 @@ Node* buildEncodingTree(Vector<Node*>& nodesVector){
  * Deallocates all memory allocated for a given encoding
  * tree.
  */
-void deleteTree(Node* &node){
+void deleteTree(Node* &node) {
     /* Fork end */
-    if(node->leftChild != NULL){
-       deleteTree(node->leftChild);
+    if (node->leftChild != NULL) {
+        deleteTree(node->leftChild);
     }
-    if(node->rightChild != NULL){
+    if (node->rightChild != NULL) {
         deleteTree(node->rightChild);
     }
-    if((node->leftChild == NULL) && (node->rightChild == NULL)){
-       node = NULL;
-       delete node;
+    if ((node->leftChild == NULL) && (node->rightChild == NULL)) {
+        node = NULL;
+        delete node;
     }
 }
 
@@ -174,19 +174,19 @@ void deleteTree(Node* &node){
  * - 1 - if it's leaf at this traverse, without childs.
  *   It is followed by char byte code.
  */
-void encodeTreeToFileHeader(Node* node, obstream& outstr){
+void encodeTreeToFileHeader(Node* node, obstream& outstr) {
     /* This node is fork end
      * We should write '1' and char code then */
-    if((node->leftChild == NULL) && (node->rightChild == NULL)){
+    if ((node->leftChild == NULL) && (node->rightChild == NULL)) {
         outstr.writeBit(1);
         outstr.put((node->symbol));
     }else{
         /* This node has childs - we should write just '0' */
         outstr.writeBit(0);
-        if(node->leftChild != NULL){
+        if (node->leftChild != NULL) {
             encodeTreeToFileHeader((node->leftChild), outstr);
         }
-        if(node->rightChild != NULL){
+        if (node->rightChild != NULL) {
             encodeTreeToFileHeader((node->rightChild), outstr);
         }
     }
@@ -205,19 +205,21 @@ void encodeTreeToFileHeader(Node* node, obstream& outstr){
  * @param node                 root of Huffman tree
  * @param cypherTable          cypher table map to fill by entries
  */
-void buildCypherTableForTree(string currentCypher, Node* node, Map<ext_char, string>& cypherTable){
+void buildCypherTableForTree(string currentCypher,
+                             Node* node,
+                             Map<ext_char, string>& cypherTable) {
     /* This node is fork end */
-    if((node->leftChild == NULL) && (node->rightChild == NULL)){
+    if ((node->leftChild == NULL) && (node->rightChild == NULL)) {
         cypherTable.add(node->symbol, currentCypher);
     }else{
         /* This node has childs */
-        if(node->leftChild != NULL){
-            string leftCypher = currentCypher + "0";           
-            buildCypherTableForTree(leftCypher , node->leftChild, cypherTable);
+        if (node->leftChild != NULL) {
+            string leftCypher = currentCypher + "0";
+            buildCypherTableForTree(leftCypher, node->leftChild, cypherTable);
         }
-        if(node->rightChild != NULL){
-            string rightCypher = currentCypher + "1";           
-            buildCypherTableForTree(rightCypher , node->rightChild, cypherTable);
+        if (node->rightChild != NULL) {
+            string rightCypher = currentCypher + "1";
+            buildCypherTableForTree(rightCypher, node->rightChild, cypherTable);
         }
     }
 }
@@ -228,9 +230,9 @@ void buildCypherTableForTree(string currentCypher, Node* node, Map<ext_char, str
  *
  * @param symbCode   stores string of bit-code for some symbol
  */
-void writeCodeToStream(string symbCode,  obstream& ofbs){
-    for(int i = 0; i < symbCode.length(); i++){
-        if(symbCode[i] == '1'){
+void writeCodeToStream(string symbCode, obstream& ofbs) {
+    for (int i = 0; i < symbCode.length(); i++) {
+        if (symbCode[i] == '1') {
             ofbs.writeBit(1);
         }else{
             ofbs.writeBit(0);
@@ -257,13 +259,13 @@ void writeCodeToStream(string symbCode,  obstream& ofbs){
  *     without seeking the file anywhere.
  */
 void encodeMainTextToFile(ibstream& infile,
-                        Node* root,
-                        obstream& ofbs){
+              Node* root,
+              obstream& ofbs) {
     /* Cyphers table - [symb][Huffman code] */
     Map<ext_char, string> cypherTable;
     string currentCypher = "";//start code to concantenate
     /* Fills cypherTable by entries [symb][Huffman code] */
-    buildCypherTableForTree(currentCypher , root, cypherTable);
+    buildCypherTableForTree(currentCypher, root, cypherTable);
 
     /* Infile stream translation process  */
     char textChar;
